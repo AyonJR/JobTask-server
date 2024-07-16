@@ -141,6 +141,17 @@ async function run() {
 
       res.json({ balance: user.balance });
     });
+ 
+  // Get Pending Users
+ app.get('/admin/pending-users', authenticateToken, async (req, res) => {
+    if (req.user.role !== 'admin') return res.sendStatus(403);
+  
+    const pendingUsers = await usersCollection.find({ status: 'pending' }).toArray();
+    res.json(pendingUsers);
+  });
+  
+ 
+
 
     // Send Money
     app.post('/send-money', authenticateToken, async (req, res) => {
